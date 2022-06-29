@@ -1,0 +1,18 @@
+{
+	"_QPVersion": "0.1.1",
+	"name": "mod pls",
+	"id": "mode2",
+	"author": "kodenamekrak",
+	"version": "0.4.0",
+	"packageId": "com.beatgames.beatsaber",
+	"packageVersion": "1.21.0",
+	"description": "i dont like this",
+	"dependencies": [],
+	"modFiles": [
+		"libmode2.so"
+	],
+	"libraryFiles": [
+		"libbeatsaber-hook_3_8_5.so"
+	],
+	"fileCopies": []
+}
