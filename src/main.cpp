@@ -9,8 +9,6 @@
 #include "questui/shared/BeatSaberUI.hpp"
 #include "config-utils/shared/config-utils.hpp"
 #include "ModConfig.hpp"
-#include "GlobalNamespace/MultiplayerBigAvatarAnimator.hpp"
-#include <unistd.h>
 using namespace GlobalNamespace;
 using namespace QuestUI;
 DEFINE_CONFIG(ModConfig);
