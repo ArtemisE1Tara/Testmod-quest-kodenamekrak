@@ -2,12 +2,12 @@
   "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
-    "name": "mod pls",
-    "id": "mode2",
-    "version": "0.6.0-t",
+    "name": "Test mod",
+    "id": "Testmod",
+    "version": "0.7.0",
     "url": null,
     "additionalData": {
-      "overrideSoName": "libmode2.so"
+      "overrideSoName": "libTestMod.so"
     }
   },
   "dependencies": [

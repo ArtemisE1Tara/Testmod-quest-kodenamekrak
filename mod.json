@@ -1,15 +1,15 @@
 {
 	"_QPVersion": "0.1.1",
-	"name": "mod pls",
-	"id": "mode2",
+	"name": "Test mod",
+	"id": "Testmod",
 	"author": "kodenamekrak",
-	"version": "0.6.0-t",
+	"version": "0.7.0",
 	"packageId": "com.beatgames.beatsaber",
 	"packageVersion": "1.21.0",
 	"description": "idk just testing stuff",
 	"dependencies": [],
 	"modFiles": [
-		"libmode2.so"
+		"libTestmod.so"
 	],
 	"libraryFiles": [
 		"libbeatsaber-hook_3_8_5.so"

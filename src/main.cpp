@@ -11,6 +11,9 @@
 #include "ModConfig.hpp"
 using namespace GlobalNamespace;
 using namespace QuestUI;
+#include "GlobalNamespace/GameplaySetupViewController.hpp"
+#include "GlobalNamespace/BeatmapObjectSpawnMovementData.hpp"
+#include "GlobalNamespace/BeatmapObjectSpawnMovementData_NoteJumpValueType.hpp"
 DEFINE_CONFIG(ModConfig);
 
 static ModInfo modInfo; // Stores the ID and version of our mod, and is sent to the modloader upon startup
@@ -30,7 +33,7 @@ Logger& getLogger() {
 
 // Called at the early stages of game loading
 extern "C" void setup(ModInfo& info) {
-    info.id = ID;
+    info.id = MOD_ID;
     info.version = VERSION;
     modInfo = info;
 	
@@ -38,135 +41,42 @@ extern "C" void setup(ModInfo& info) {
     getLogger().info("Completed setup!");
 }
 
-MAKE_HOOK_MATCH(MainMenuSoloHook, &GlobalNamespace::MainMenuViewController::DidActivate, void, GlobalNamespace::MainMenuViewController
-*self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
-    MainMenuSoloHook(self, firstActivation, addedToHierarchy, screenSystemEnabling);
-    
-    UnityEngine::UI::Button *soloMenuButton = self->dyn__soloButton();
-    UnityEngine::GameObject *gameObject = soloMenuButton->get_gameObject();
-    HMUI::CurvedTextMeshPro *soloMenuText = gameObject->GetComponentInChildren<HMUI::CurvedTextMeshPro *>();
+/*AKE_HOOK_MATCH(SoloFreeplayButtons, &GlobalNamespace::GameplaySetupViewController::DidActivate, void, GlobalNamespace::GameplaySetupViewController *self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+{
+    SoloFreeplayButtons(self, firstActivation, addedToHierarchy, screenSystemEnabling);
+    if (firstActivation)
+    {
+        getLogger().info("Creating UI button");
+    QuestUI::BeatSaberUI::CreateUIButton(self->get_transform(), "Test", UnityEngine::Vector2(150.0f, 20.0f), UnityEngine::Vector2(20.0f, 20.0f), [&]() {
+        getModConfig().Clicked.SetValue(getModConfig().Clicked.GetValue() + 1);
+ });
+ }
+}*/
 
-    if(getModConfig().SoloToggle.GetValue() == 0){
-    soloMenuText->SetText("SOLO!");
-    }
-    else if(getModConfig().SoloToggle.GetValue() == 1){
-    soloMenuText->SetText(getModConfig().SoloButton.GetValue());
-    }
-    else{
-        getModConfig().SoloToggle.SetValue(0);
-    }
-  }
-  
-  MAKE_HOOK_MATCH(MainMenuPartyHook, &GlobalNamespace::MainMenuViewController::DidActivate, void, GlobalNamespace::MainMenuViewController
-*self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
-    MainMenuPartyHook(self, firstActivation, addedToHierarchy, screenSystemEnabling);
+MAKE_HOOK_MATCH(BeatmapObjectSpawnMovementData_Init, &BeatmapObjectSpawnMovementData::Init,
+        void, BeatmapObjectSpawnMovementData* self, int noteLinesCount, float startNoteJumpMovementSpeed, float startBpm, BeatmapObjectSpawnMovementData::NoteJumpValueType noteJumpValueType, float noteJumpValue, IJumpOffsetYProvider* jumpOffsetYProvider, UnityEngine::Vector3 rightVec, UnityEngine::Vector3 forwardVec) {
+            if(getModConfig().NoteJumpSpeedEnabled.GetValue() == true){
+            startNoteJumpMovementSpeed = getModConfig().NoteJumpSpeed.GetValue();
+            }
+            else{
+              BeatmapObjectSpawnMovementData_Init(self, noteLinesCount, startNoteJumpMovementSpeed, startBpm, noteJumpValueType, noteJumpValue, jumpOffsetYProvider, rightVec, forwardVec);
+            }
 
-    UnityEngine::UI::Button *partyMenuButton = self->dyn__partyButton();
-    UnityEngine::GameObject *gameObject = partyMenuButton->get_gameObject();
-    HMUI::CurvedTextMeshPro *partyMenuText = gameObject->GetComponentInChildren<HMUI::CurvedTextMeshPro *>();
-
-        if(getModConfig().PartyToggle.GetValue() == 0){
-    partyMenuText->SetText("PARTY!");
-    }
-    else if(getModConfig().PartyToggle.GetValue() == 1){
-    partyMenuText->SetText(getModConfig().PartyButton.GetValue());
-    }
-    else{
-        getModConfig().PartyToggle.SetValue(0);
-    }
+    BeatmapObjectSpawnMovementData_Init(self, noteLinesCount, startNoteJumpMovementSpeed, startBpm, noteJumpValueType, noteJumpValue, jumpOffsetYProvider, rightVec, forwardVec);
 }
-
-  MAKE_HOOK_MATCH(MainMenuOnlineHook, &GlobalNamespace::MainMenuViewController::DidActivate, void, GlobalNamespace::MainMenuViewController
-*self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
-    MainMenuOnlineHook(self, firstActivation, addedToHierarchy, screenSystemEnabling);
-
-    UnityEngine::UI::Button *onlineMenuButton = self->dyn__multiplayerButton();
-    UnityEngine::GameObject *gameObject = onlineMenuButton->get_gameObject();
-    HMUI::CurvedTextMeshPro *onlineMenuText = gameObject->GetComponentInChildren<HMUI::CurvedTextMeshPro *>();
-
-        if(getModConfig().OnlineToggle.GetValue() == 0){
-    onlineMenuText->SetText("ONLINE!");
-    }
-    else if(getModConfig().OnlineToggle.GetValue() == 1){
-    onlineMenuText->SetText(getModConfig().OnlineButton.GetValue());
-    }
-    else{
-        getModConfig().OnlineToggle.SetValue(0);
-    }
-    }
-  
-    MAKE_HOOK_MATCH(MainMenuCampaignHook, &GlobalNamespace::MainMenuViewController::DidActivate, void, GlobalNamespace::MainMenuViewController
-*self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
-    MainMenuCampaignHook(self, firstActivation, addedToHierarchy, screenSystemEnabling);
-
-    UnityEngine::UI::Button *campaignMenuButton = self->dyn__campaignButton();
-    UnityEngine::GameObject *gameObject = campaignMenuButton->get_gameObject();
-    HMUI::CurvedTextMeshPro *campaignMenuText = gameObject->GetComponentInChildren<HMUI::CurvedTextMeshPro *>();
-
-        if(getModConfig().CampaignToggle.GetValue() == 0){
-    campaignMenuText->SetText("CAMPAIGN!");
-    }
-    else if(getModConfig().CampaignToggle.GetValue() == 1){
-    campaignMenuText->SetText(getModConfig().CampaignButton.GetValue());
-    }
-    else{
-        getModConfig().CampaignToggle.SetValue(0);
-    }
-}
-
-MAKE_HOOK_MATCH(ResultsContinueHook, &GlobalNamespace::ResultsViewController::DidActivate, void, GlobalNamespace::ResultsViewController *self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling){
-    ResultsContinueHook(self, firstActivation, addedToHierarchy, screenSystemEnabling);
-
-    UnityEngine::UI::Button *continueResultsButton = self->dyn__continueButton();
-    UnityEngine::GameObject *gameObject = continueResultsButton->get_gameObject();
-    HMUI::CurvedTextMeshPro * continueResultsText = gameObject->GetComponentInChildren<HMUI::CurvedTextMeshPro *>();
-
-    continueResultsText->SetText("L bozo");
+MAKE_HOOK_MATCH(GameplaySetupViewController, &GameplaySetupViewController::DidActivate, void, GlobalNamespace::GameplaySetupViewController *self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling){
+    GameplaySetupViewController(self, firstActivation, addedToHierarchy, screenSystemEnabling);
 }
 
 void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling){
 if(firstActivation){
 UnityEngine::GameObject* container = BeatSaberUI::CreateScrollableSettingsContainer(self->get_transform());
-BeatSaberUI::CreateUIButton(container->get_transform(), "Solo Toggle!",
-[&](){
-    getLogger().info("I was clicked");
-    if(getModConfig().SoloToggle.GetValue() == 0){
-    getModConfig().SoloToggle.SetValue(1);
-    }
-    else {
-        getModConfig().SoloToggle.SetValue(0);
-    }
-});
-BeatSaberUI::CreateUIButton(container->get_transform(), "Online Toggle!",
-[&](){
-    getLogger().info("I was clicked");
-    if(getModConfig().OnlineToggle.GetValue() == 0){
-    getModConfig().OnlineToggle.SetValue(1);
-    }
-    else {
-        getModConfig().OnlineToggle.SetValue(0);
-    }
-});
-BeatSaberUI::CreateUIButton(container->get_transform(), "Party Toggle!",
-[&](){
-    getLogger().info("I was clicked");
-    if(getModConfig().PartyToggle.GetValue() == 0){
-    getModConfig().PartyToggle.SetValue(1);
-    }
-    else {
-        getModConfig().PartyToggle.SetValue(0);
-    }
-});
-BeatSaberUI::CreateUIButton(container->get_transform(), "Campaign Toggle!",
-[&](){
-    getLogger().info("I was clicked");
-    if(getModConfig().CampaignToggle.GetValue() == 0){
-    getModConfig().CampaignToggle.SetValue(1);
-    }
-    else {
-        getModConfig().CampaignToggle.SetValue(0);
-    }
-});
+ QuestUI::BeatSaberUI::CreateToggle(container->get_transform(), "Is Enabled", getModConfig().NoteJumpSpeedEnabled.GetValue(),
+     [](bool value) {  
+    getModConfig().NoteJumpSpeedEnabled.SetValue(value);
+                }
+            );
+AddConfigValueIncrementFloat(container->get_transform(), getModConfig().NoteJumpSpeed, 0, 1.0f, 0.f, 50);
 }
 }
 
@@ -178,13 +88,11 @@ extern "C" void load() {
     QuestUI::Init();
     QuestUI::Register::RegisterModSettingsViewController(modInfo, DidActivate);
     QuestUI::Register::RegisterMainMenuModSettingsViewController(modInfo, DidActivate);
+    QuestUI::Register::RegisterGameplaySetupMenu(modInfo, QuestUI::Register::MenuType::All);
     getLogger().info("Bad menu initiated");
 
     getLogger().info("Installing hooks...");
-    INSTALL_HOOK(getLogger(), MainMenuSoloHook);
-    INSTALL_HOOK(getLogger(), MainMenuOnlineHook);
-    INSTALL_HOOK(getLogger(), MainMenuPartyHook);
-    INSTALL_HOOK(getLogger(), MainMenuCampaignHook);
-    INSTALL_HOOK(getLogger(), ResultsContinueHook);
+    INSTALL_HOOK(getLogger(), BeatmapObjectSpawnMovementData_Init);
+    //INSTALL_HOOK(getLogger(), SoloFreeplayButtons);
     getLogger().info("Installed all hooks!");
 }
