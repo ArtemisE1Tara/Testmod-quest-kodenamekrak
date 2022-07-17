@@ -4,7 +4,7 @@
   "info": {
     "name": "Test mod",
     "id": "Testmod",
-    "version": "0.7.0",
+    "version": "0.8.0-t",
     "url": null,
     "additionalData": {
       "overrideSoName": "libTestMod.so"

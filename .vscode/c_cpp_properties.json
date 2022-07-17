@@ -15,7 +15,9 @@
                 "${workspaceFolder}/shared",
                 "${workspaceFolder}/**",
                 "C:/android-ndk/",
-                "${default}"
+                "${default}",
+                "C:/android-ndk/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/c++/v1",
+                "C:/android-ndk/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include"
             ],
             "name": "Quest",
             "cStandard": "c11",
