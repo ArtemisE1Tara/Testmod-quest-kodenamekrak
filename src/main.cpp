@@ -4,9 +4,6 @@
 #include "config-utils/shared/config-utils.hpp"
 #include "ModConfig.hpp"
 #include "hooks.hpp"
-#include "GlobalNamespace/MultiplayerBigAvatarAnimator.hpp"
-#include "UnityEngine/Vector3.hpp"
-#include "UnityEngine/Quaternion.hpp"
 #include "HMUI/ViewController.hpp"
 #include "UnityEngine/UI/LayoutElement.hpp"
 
@@ -38,10 +35,6 @@ extern "C" void setup(ModInfo& info) {
     getLogger().info("Completed setup!");
 }
 
-//testing this it probably doesnt work
-MAKE_AUTO_HOOK_MATCH(MultiAvatar, &GlobalNamespace::MultiplayerBigAvatarAnimator::SetPositionAndRotation, void, GlobalNamespace::MultiplayerBigAvatarAnimator* self, UnityEngine::Vector3 position, UnityEngine::Quaternion rotation){
-self->dyn__displayedScale() = 2.0f;
-}
 
 void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
     // Create our UI elements only when shown for the first time.
