@@ -9,12 +9,10 @@ DECLARE_CONFIG(ModConfig,
     CONFIG_VALUE(Clicked, int, "Clicked", 0);
     CONFIG_VALUE(RotationEnabled, bool, "Enable Rotation", false);
     CONFIG_VALUE(RotationIncrement, float, "Rotation Increment", 0.0f);
-    CONFIG_VALUE(ButtonXPos, float, "X position", 0.0f);
-    CONFIG_VALUE(ButtonYPos, float, "Y position", 0.0f);
-    CONFIG_VALUE(ButtonXSize, float, "Width", 10.0f);
-    CONFIG_VALUE(ButtonYSize, float, "Height", 10.0f);
-
-
+    CONFIG_VALUE(Test, std::string, "Test", "TEST!");
+    CONFIG_VALUE(SwapColours, bool, "A jank colour swap", false);
+    CONFIG_VALUE(ScreenTextChanger, bool, "Respawns the screen ", false);
+    CONFIG_VALUE(NJSTEST, float, "NJSTEST", 0.0f);
 
     CONFIG_INIT_FUNCTION(
         CONFIG_INIT_VALUE(NoteJumpSpeed);
@@ -22,10 +20,10 @@ DECLARE_CONFIG(ModConfig,
         CONFIG_INIT_VALUE(Clicked);
         CONFIG_INIT_VALUE(RotationEnabled);
         CONFIG_INIT_VALUE(RotationIncrement);
-        CONFIG_INIT_VALUE(ButtonXPos);
-        CONFIG_INIT_VALUE(ButtonYPos);
-        CONFIG_INIT_VALUE(ButtonXSize);
-        CONFIG_INIT_VALUE(ButtonYSize);
+        CONFIG_INIT_VALUE(Test);
+        CONFIG_INIT_VALUE(SwapColours);
+        CONFIG_INIT_VALUE(ScreenTextChanger);
+        CONFIG_INIT_VALUE(NJSTEST);
 
     )
 )

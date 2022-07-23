@@ -4,6 +4,12 @@
 #include "config-utils/shared/config-utils.hpp"
 #include "ModConfig.hpp"
 #include "hooks.hpp"
+#include "GlobalNamespace/MultiplayerBigAvatarAnimator.hpp"
+#include "UnityEngine/Vector3.hpp"
+#include "UnityEngine/Quaternion.hpp"
+#include "HMUI/ViewController.hpp"
+#include "UnityEngine/UI/LayoutElement.hpp"
+
 using namespace GlobalNamespace;
 DEFINE_CONFIG(ModConfig);
 
@@ -32,28 +38,35 @@ extern "C" void setup(ModInfo& info) {
     getLogger().info("Completed setup!");
 }
 
-void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling){
-if(firstActivation){
-UnityEngine::GameObject* container = QuestUI::BeatSaberUI::CreateScrollableSettingsContainer(self->get_transform());
-
-AddConfigValueToggle(container->get_transform(), getModConfig().NoteJumpSpeedEnabled)->get_gameObject();
-
-            AddConfigValueIncrementFloat(container->get_transform(), getModConfig().NoteJumpSpeed, 0, 1.0f, 0.f, 50);
-
-
-AddConfigValueToggle(container->get_transform(), getModConfig().RotationEnabled)->get_gameObject();
-
-AddConfigValueIncrementFloat(container->get_transform(), getModConfig().RotationIncrement, 0, 5.0f, 0.f, 30);
-
-QuestUI::BeatSaberUI::CreateUIButton(container->get_transform(), "", [&](){
-    getModConfig().RotationIncrement.SetValue(0);
-});
-AddConfigValueIncrementFloat(container->get_transform(), getModConfig().ButtonXPos, 0, 5.0f, 0.f, 100);
-AddConfigValueIncrementFloat(container->get_transform(), getModConfig().ButtonYPos, 0, 5.0f, 0.f, 100);
-AddConfigValueIncrementFloat(container->get_transform(), getModConfig().ButtonXSize, 0, 5.0f, 0.f, 100);
-AddConfigValueIncrementFloat(container->get_transform(), getModConfig().ButtonYSize, 0, 5.0f, 0.f, 100);
-
+//testing this it probably doesnt work
+MAKE_AUTO_HOOK_MATCH(MultiAvatar, &GlobalNamespace::MultiplayerBigAvatarAnimator::SetPositionAndRotation, void, GlobalNamespace::MultiplayerBigAvatarAnimator* self, UnityEngine::Vector3 position, UnityEngine::Quaternion rotation){
+self->dyn__displayedScale() = 2.0f;
 }
+
+void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
+    // Create our UI elements only when shown for the first time.
+    if(firstActivation) {
+
+        UnityEngine::GameObject* container = QuestUI::BeatSaberUI::CreateScrollableSettingsContainer(self->get_transform());
+
+        AddConfigValueToggle(container->get_transform(), getModConfig().NoteJumpSpeedEnabled);
+        AddConfigValueIncrementFloat(container->get_transform(), getModConfig().NoteJumpSpeed, 0, 1.0f, -50.0f, 50.0f);
+
+        AddConfigValueToggle(container->get_transform(), getModConfig().RotationEnabled);
+        AddConfigValueIncrementFloat(container->get_transform(), getModConfig().RotationIncrement, 0, 5.0f, -180.0f, 180.0f);
+
+        QuestUI::BeatSaberUI::AddHoverHint(AddConfigValueToggle(container->get_transform(), getModConfig().SwapColours)->get_gameObject(), "Overrides Other stuff");
+
+
+
+        UnityEngine::Transform* parent = container->get_transform();
+        auto layout = QuestUI::BeatSaberUI::CreateHorizontalLayoutGroup(parent);  layout->GetComponent<UnityEngine::UI::LayoutElement*>()->set_preferredWidth(60.0f); 
+        layout->set_childControlWidth(true); 
+        auto layoutParent = layout->get_transform();
+
+        auto stringSetting = AddConfigValueStringSetting(layoutParent, getModConfig().Test);
+
+    }
 }
 
 // Called later on in the game loading - a good time to install function hooks
@@ -64,7 +77,14 @@ extern "C" void load() {
     QuestUI::Register::RegisterMainMenuModSettingsViewController(modInfo, DidActivate);
     QuestUI::Register::RegisterModSettingsViewController(modInfo, DidActivate);
 
+    il2cpp_functions::Init();
+
+    getModConfig().Init(modInfo);
+
     getLogger().info("Installing hooks...");
+
+    auto& logger = getLogger();
+    Hooks::InstallHooks(logger);
 
     getLogger().info("Installed all hooks!");
 }
