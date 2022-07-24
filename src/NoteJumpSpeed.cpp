@@ -11,7 +11,7 @@
 #include "GlobalNamespace/BeatmapCharacteristicSO.hpp"
 #include "GlobalNamespace/PlayerData.hpp"
 #include "GlobalNamespace/IDifficultyBeatmap.hpp"
-#include "GlobalNamespace/StandardLevelDetailView.hpp"
+//#include "GlobalNamespace/StandardLevelDetailView.hpp"
 #include "beatsaber-hook/shared/utils/logging.hpp"
 #include "GlobalNamespace/LevelScenesTransitionSetupDataSO.hpp"
 #include "GlobalNamespace/GameplayCoreSceneSetupData.hpp"
@@ -20,10 +20,8 @@
 
 bool GotNJS = false;
 float NJS;
-float practiceSpeed = 1;
 
 using namespace GlobalNamespace;
-IDifficultyBeatmap* currentBeatmap = nullptr;
 #include "custom-types/shared/register.hpp"
 
 
@@ -41,36 +39,7 @@ MAKE_AUTO_HOOK_MATCH(BeatmapObjectSpawnMovementData_Init, &BeatmapObjectSpawnMov
             startNoteJumpMovementSpeed = getModConfig().NoteJumpSpeed.GetValue();
             } 
               BeatmapObjectSpawnMovementData_Init(self, noteLinesCount, startNoteJumpMovementSpeed, startBpm, noteJumpValueType, noteJumpValue, jumpOffsetYProvider, rightVec, forwardVec);
-
-              BeatmapObjectSpawnMovementData_Init(self, noteLinesCount, startNoteJumpMovementSpeed, startBpm, noteJumpValueType, noteJumpValue, jumpOffsetYProvider, rightVec, forwardVec);
-      
         }
 
-
-        void UpdateLevel(IDifficultyBeatmap* beatmap, bool forceSet = false) {
-    if(currentBeatmap == beatmap && !forceSet)
-        return;
-    currentBeatmap = beatmap;
-
-        getModConfig().NJSTEST.SetValue(beatmap->get_noteJumpMovementSpeed());
-
-        GotNJS = true;
-
-  
-}
-
-MAKE_AUTO_HOOK_MATCH(NJSResetter, &ResultsViewController::DidActivate, void, ResultsViewController* self, bool firstActivation, bool addedToHeirarchy, bool screenSystemEnabling){
-          if(firstActivation){
-            getModConfig().NJSTEST.SetValue(0);
-            GotNJS = false;
-          }
-        }
-
-
-        MAKE_HOOK_MATCH(StandardLevelDetailView_RefreshContent, &StandardLevelDetailView::RefreshContent, void, StandardLevelDetailView* self) {
-    StandardLevelDetailView_RefreshContent(self);
-
-    UpdateLevel(self->selectedDifficultyBeatmap);
-}
 
     

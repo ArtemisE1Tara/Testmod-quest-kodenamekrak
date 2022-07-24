@@ -33,12 +33,13 @@ if(firstActivation){
 
     // similar place and same size as randomsongpicker because i use it so it just looks nicer if they are both the same size
     auto button = QuestUI::BeatSaberUI::CreateUIButton(self->get_transform(), "", UnityEngine::Vector2(56.0f, -15.0f), [&](){
+        auto Screen1 = testScreen->get_gameObject();
         if(showScreen){
             showScreen = false;
-            testScreen->set_active(false);
+            Screen1->SetActive(false);
         }
         else{
-            testScreen->set_active(true);
+            Screen1->SetActive(true);
             showScreen = true;
         }
 

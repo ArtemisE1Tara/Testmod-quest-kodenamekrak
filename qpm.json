@@ -3,11 +3,11 @@
   "dependenciesDir": "extern",
   "info": {
     "name": "Test mod",
-    "id": "Testmod",
+    "id": "Test-Mod",
     "version": "0.8.0-t",
     "url": null,
     "additionalData": {
-      "overrideSoName": "libTestMod.so"
+      "overrideSoName": "libTest-Mod.so"
     }
   },
   "dependencies": [

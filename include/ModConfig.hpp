@@ -13,6 +13,14 @@ DECLARE_CONFIG(ModConfig,
     CONFIG_VALUE(SwapColours, bool, "A jank colour swap", false);
     CONFIG_VALUE(ScreenTextChanger, bool, "Respawns the screen ", false);
     CONFIG_VALUE(NJSTEST, float, "NJSTEST", 0.0f);
+    CONFIG_VALUE(XPos, float, "XPos", 0);
+    CONFIG_VALUE(YPos, float, "YPos", 0);
+    CONFIG_VALUE(ZPos, float, "ZPos", 0);
+    CONFIG_VALUE(XRot, float, "XRot", 0);
+    CONFIG_VALUE(YRot, float, "YRot", 0);
+    CONFIG_VALUE(ZRot, float, "ZRot", 0);
+    CONFIG_VALUE(Scale, float, "Scale", 0.2f);
+
 
     CONFIG_INIT_FUNCTION(
         CONFIG_INIT_VALUE(NoteJumpSpeed);
@@ -24,6 +32,13 @@ DECLARE_CONFIG(ModConfig,
         CONFIG_INIT_VALUE(SwapColours);
         CONFIG_INIT_VALUE(ScreenTextChanger);
         CONFIG_INIT_VALUE(NJSTEST);
+        CONFIG_INIT_VALUE(XPos);
+        CONFIG_INIT_VALUE(YPos);
+        CONFIG_INIT_VALUE(ZPos);
+        CONFIG_INIT_VALUE(XRot);
+        CONFIG_INIT_VALUE(YRot);
+        CONFIG_INIT_VALUE(ZRot);
+        CONFIG_INIT_VALUE(Scale);
 
     )
 )

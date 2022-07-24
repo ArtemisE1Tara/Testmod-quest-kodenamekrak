@@ -9,6 +9,7 @@
 
 using namespace GlobalNamespace;
 DEFINE_CONFIG(ModConfig);
+float scale = 0.2f;
 
 static ModInfo modInfo; // Stores the ID and version of our mod, and is sent to the modloader upon startup
 
@@ -50,6 +51,16 @@ void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToH
 
         QuestUI::BeatSaberUI::AddHoverHint(AddConfigValueToggle(container->get_transform(), getModConfig().SwapColours)->get_gameObject(), "Overrides Other stuff");
 
+
+        UnityEngine::GameObject* Corner1 = QuestUI::BeatSaberUI::CreateFloatingScreen(UnityEngine::Vector2(100.0f * getModConfig().Scale.GetValue() , 1.0f), UnityEngine::Vector3(0 , 1.0f, 1.0f * getModConfig().Scale.GetValue()), UnityEngine::Vector3(0, 0, 0), 0.0f, false, true, 3);
+        UnityEngine::GameObject* Corner2 = QuestUI::BeatSaberUI::CreateFloatingScreen(UnityEngine::Vector2(100.0f * getModConfig().Scale.GetValue() , 1.0f), UnityEngine::Vector3(0 , 1.0f, -1.0f * getModConfig().Scale.GetValue()), UnityEngine::Vector3(0, 0, 0), 0.0f, false, true, 3);
+        UnityEngine::GameObject* Corner3 = QuestUI::BeatSaberUI::CreateFloatingScreen(UnityEngine::Vector2(100.0f * 0.6666f * getModConfig().Scale.GetValue(), 1.0f), UnityEngine::Vector3(1.5f * getModConfig().Scale.GetValue(), 1.0f, 0), UnityEngine::Vector3(0, 90, 0), 0.0f, false, true, 3);
+        UnityEngine::GameObject* Corner4 = QuestUI::BeatSaberUI::CreateFloatingScreen(UnityEngine::Vector2(100.0f * 0.6666f * getModConfig().Scale.GetValue(), 1.0f), UnityEngine::Vector3(-1.5f * getModConfig().Scale.GetValue(), 1.0f, 0), UnityEngine::Vector3(0, 90, 0), 0.0f, false, true, 3);
+        AddConfigValueIncrementFloat(container->get_transform(), getModConfig().Scale, 1, 0.1f, 0.1f, 1.5f);
+        QuestUI::BeatSaberUI::CreateUIButton(container->get_transform(), "test", [&](){
+            UnityEngine::Transform* Screen = Corner1->get_transform();
+            Screen->set_position(UnityEngine::Vector3(0, 0, 0));
+        });
 
 
         UnityEngine::Transform* parent = container->get_transform();
